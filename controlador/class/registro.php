@@ -17,11 +17,15 @@ if($codigo==0){
         $_SESSION['ERROR'] = "¡Error al Registrar!";
         header("Location:../../addprod.php");
     }
-}/*else{
-    if($met->actualizarPro($nombre_pro, $categoria_pro, $precio_pro, $stock_pro, $codigo)){
+}else{
+    if($met->actualizarPro($nombre_prod, $tipo_plato, $precio_prod, $codigo)){
         $_SESSION['MENSAJE'] = "¡Modificacion Exitosa!";
-        header("Location:../../buttons.php");
+        header("Location:../../listprod.php");
+    }else{
+        //echo 'Registro erroneo';
+        $_SESSION['ERROR'] = "¡Error al Modificar!";
+        header("Location:../../listprod.php");
     }
-}*/
+}
 
 ?>

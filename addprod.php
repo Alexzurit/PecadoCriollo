@@ -21,7 +21,7 @@
 </style>
 <?php require_once 'vistas/parte-superior.php'; ?>
 <!-- ========= Main content section of dashboard ======= -->
-<h1 class="text-center mt-3" >Añadir Productos</h1>
+<h1 class="text-center mt-3" >Añade Nuevos Platos</h1>
 <div class="modal-body mx-3">
     
     <form id="formProducto" method="POST" action="controlador/class/registro.php" enctype="multipart/form-data">

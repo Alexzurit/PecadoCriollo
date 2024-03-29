@@ -46,6 +46,62 @@ class methods extends Conexion{
         }
         $conexion->close();
     }
+    
+    public function actualizarPro($nombre_prod,$tipo_plato,$precio_prod,$codigo){
+        $conexion = parent::conectar();
+        $sql = "UPDATE tb_producto SET nombre_prod='$nombre_prod', tipo_plato='$tipo_plato', precio_prod='$precio_prod' WHERE id_producto='$codigo' ";
+        if ($conexion->query($sql) === TRUE) {
+            //echo 'El registro se guardó correctamente.';
+            return true;
+        } else {
+            //echo 'Error al guardar el registro: ' . $conexion->error;
+            return false;
+        }
+        $conexion->close();
+    }
+    
+    public function eliminarConCodigo($id) {
+        $conexion = parent::conectar();
+        $sql = "DELETE FROM tb_producto WHERE id_producto =?";
+        $query = $conexion->prepare($sql);
+        $query->bind_param('i', $id);
+        
+        $resultado =$query->execute();
+        // Cierra la conexión
+        $conexion->close();
+        return $resultado;
+    }
+    
+    public function listPro(){
+        $resultados = array();
+        try {
+            $conexion = parent::conectar();
+            $sql = "SELECT *FROM tb_producto";
+            
+            $stmt = $conexion->prepare($sql);
+            if ($stmt->execute()) {
+                $stmt->bind_result($id_producto, $nombre_prod, $tipo_plato, $precio_prod);
+
+                while ($stmt->fetch()) {
+                    
+                    $resultados[] = array(
+                        'id_producto' => $id_producto,
+                        'nombre_prod' => $nombre_prod,
+                        'tipo_plato' => $tipo_plato,
+                        'precio_pro' => $precio_prod,
+                    );
+                }
+            }
+        } catch (Exception $ex) {
+            echo $ex->getMessage();
+        } finally {
+            $stmt->close();
+            $conexion->close();
+        }
+        // Devolver los resultados en formato JSON
+        header('Content-Type: application/json');
+        echo json_encode($resultados);
+    }
 }
 
 ?>

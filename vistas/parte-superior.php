@@ -58,24 +58,24 @@
                                 <a href="addprod.php" class="sidebar-link">Registrar</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Page 2</a>
+                                <a href="listprod.php" class="sidebar-link">Ver Lista</a>
                             </li>
                         </ul>
                     </li>
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#posts" data-bs-toggle="collapse"
-                        aria-expanded="false"><i class="fa-solid fa-sliders pe-2"></i>
-                        Posts
+                        aria-expanded="false"><i class="bi bi-cash-coin"></i>
+                        Ventas
                         </a>
                         <ul id="posts" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Post 1</a>
+                                <a href="#" class="sidebar-link">Realizar Venta</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Post 2</a>
+                                <a href="#" class="sidebar-link">Historial Venta</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Post 3</a>
+                                <a href="#" class="sidebar-link">Reporte</a>
                             </li>
                         </ul>
                     </li>
