@@ -40,11 +40,10 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/script.js"></script>
-    
-    <!--Script de boostrap5, toatr y sweet alert-->
-    <!--Para validar y registrocdsscas-->
     <!-- libreria principal de JQUERY -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <!--Script de boostrap5, toatr y sweet alert-->
+    <!--Para validar y registrocdsscas-->
     <!-- Libreria Jquery de boostrap y que funcione Modal-->
     
     <!-- libreria JS de la tabla (buscador)-->

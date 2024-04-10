@@ -2,6 +2,33 @@
 include 'conexion.php';
 
 class methods extends Conexion{
+    
+    public function login($usuario, $password) {
+            $conexion = parent::conectar();
+            $sql = "SELECT * FROM tb_usuarios WHERE usuario = '$usuario'";
+            $respuesta = mysqli_query($conexion, $sql);
+
+            if ($respuesta && mysqli_num_rows($respuesta) > 0) {
+                $datosUsuario = mysqli_fetch_assoc($respuesta);
+                $passwordExistente = $datosUsuario['clave'];
+
+                if (password_verify($password, $passwordExistente)) {
+                    // Almacena información adicional en la sesión si es necesario
+                    $_SESSION['id_usuario'] = $datosUsuario['id_usuario'];
+                    $_SESSION['usuario'] = $usuario;
+                    $_SESSION['nombres'] = $datosUsuario['nombres']; // Reemplaza 'nombre' con el nombre de tu columna
+                    // Puedes agregar más información aquí siguiendo el mismo patrón
+                    $_SESSION['apellidos'] = $datosUsuario['apellidos'];
+                    $_SESSION['rol'] = $datosUsuario['rol'];
+                    return true;
+                } else {
+                    return false; // Contraseña incorrecta
+                }
+            } else {
+                return false; // Usuario no encontrado en la base de datos
+            }
+        }
+    
     public function listarTipos(){
         $conexion = parent::conectar();
         
@@ -22,6 +49,33 @@ class methods extends Conexion{
                     $tipos[] = $fila;
                 }
 
+                // Devolver el array de categorías
+                return $tipos;
+            } else {
+                // No se encontraron registros
+                return array();
+            }
+        } else {
+            // Si ocurre un error en la consulta
+            return false;
+        }
+    }
+    
+    public function listarMesas(){
+        $conexion = parent::conectar();
+        // Consulta SQL para seleccionar todos los registros de la tabla 'categoria'
+        $sql = "SELECT * FROM tb_mesas";
+        // Ejecutar la consulta
+        $resultado = $conexion->query($sql);
+        if ($resultado) {
+            // Comprobar si hay al menos un registro
+            if ($resultado->num_rows > 0) {
+                // Crear un array para almacenar los resultados
+                $tipos = array();
+                // Recorrer los resultados y almacenarlos en el array
+                while ($fila = $resultado->fetch_assoc()) {
+                    $tipos[] = $fila;
+                }
                 // Devolver el array de categorías
                 return $tipos;
             } else {
@@ -102,6 +156,142 @@ class methods extends Conexion{
         header('Content-Type: application/json');
         echo json_encode($resultados);
     }
+    
+    public function listFiltro($tipo) {
+    try {
+        $conexion = parent::conectar();
+        // Consulta SQL para obtener los productos filtrados por tipo de plato
+        $sql = "SELECT * FROM tb_producto WHERE tipo_plato = ?";
+        
+        // Preparar la consulta
+        $pstm = $conexion->prepare($sql);
+        
+        // Vincular parámetros
+        $pstm->bind_param('s', $tipo);
+        
+        // Ejecutar la consulta
+        $pstm->execute();
+        
+        // Obtener resultados
+        $resultado = $pstm->get_result();
+        
+        if ($resultado->num_rows > 0) {
+            $productosFiltrados = array();
+            // Recorre los resultados y los agrega al array de productos filtrados
+            while ($fila = $resultado->fetch_assoc()) {
+                $productosFiltrados[] = $fila;
+            }
+            
+            // Devuelve los productos filtrados en formato JSON
+            echo json_encode($productosFiltrados);
+        } else {
+            // Si no se encontraron resultados, devuelve un mensaje de error en formato JSON
+            echo json_encode(array('error' => 'No se encontraron productos para el tipo de plato especificado.'));
+        }
+    } catch (Exception $ex) {
+        // Manejar la excepción
+        echo json_encode(array('error' => $ex->getMessage()));
+    } finally {
+        // Cierra la conexión a la base de datos
+        $conexion->close();
+    }
+}
+
+public function transaction($carrito, $id_usuario) {
+    // Obtener conexión desde la clase padre
+    $conexion = parent::conectar();
+    
+    // Verificar la conexión
+    if ($conexion->connect_error) {
+        die("Error de conexión: " . $conexion->connect_error);
+    }
+    
+    // Iniciar transacción
+    $conexion->begin_transaction();
+    
+    try {
+        // Verificar si $carrito es un array y si tiene al menos un elemento
+        if (!is_array($carrito) || empty($carrito)) {
+            $carrito_info = json_encode($carrito);
+            throw new Exception("El carrito está vacío o no tiene el formato esperado. datos del carro".$carrito_info);
+        }
+        $id_mesa = $carrito[0]['mesa'];
+        // Crear la venta en la tabla tb_ventas
+        $sql_venta = "INSERT INTO tb_ventas (id_usuario, id_mesa, fecha_venta, total_venta)
+                      VALUES (?, ?, NOW(), 0)";
+        
+        $stmt_venta = $conexion->prepare($sql_venta);
+        
+        // Recuperar el ID de mesa del primer producto en el carrito
+        //$id_mesa = $carrito[0]['mesa']; // Suponiendo que todos los productos en el carrito comparten la misma mesa
+
+        $stmt_venta->bind_param("ii", $id_usuario, $id_mesa);
+        
+        
+        if ($stmt_venta->execute()) {
+            // Obtener el ID de la venta recién insertada
+            $id_venta = $stmt_venta->insert_id;
+
+            // Calcular el total de la venta sumando los subtotales de los productos
+            $total_venta = 0;
+
+            // Preparar la consulta para insertar detalles de la venta
+            $sql_detalle = "INSERT INTO tb_detalle_venta (id_venta, id_producto, cantidad_vendida, precio_venta, subtotal)
+                            VALUES (?, ?, ?, ?, ?)";
+            
+            $stmt_detalle = $conexion->prepare($sql_detalle);
+            $stmt_detalle->bind_param("iiidd", $id_venta, $id_producto, $cantidad_vendida, $precio_venta, $subtotal);
+
+            // Recorrer el carrito y agregar los detalles de la venta a la tabla tb_detalle_venta
+            foreach ($carrito as $producto) {
+                // Verificar si el producto tiene las claves necesarias
+                if (!isset($producto['codigo'], $producto['cantidad'], $producto['precio'])) {
+                    throw new Exception("El producto en el carrito no tiene los datos necesarios.");
+                }
+                
+                $id_producto = $producto['codigo'];
+                $cantidad_vendida = $producto['cantidad'];
+                $precio_venta = $producto['precio'];
+                $subtotal = $cantidad_vendida * $precio_venta;
+
+                // Ejecutar la consulta preparada para insertar detalles de la venta
+                $stmt_detalle->execute();
+
+                // Actualizar el total de la venta
+                $total_venta += $subtotal;
+            }
+
+            // Actualizar el total de la venta en la tabla tb_ventas
+            $sql_actualizar_total = "UPDATE tb_ventas SET total_venta = ? WHERE id_venta = ?";
+            
+            $stmt_actualizar_total = $conexion->prepare($sql_actualizar_total);
+            $stmt_actualizar_total->bind_param("di", $total_venta, $id_venta);
+            $stmt_actualizar_total->execute();
+
+            // Confirmar la transacción
+            $conexion->commit();
+
+            // La compra se realizó con éxito
+            $response = array("success" => true);
+        } else {
+            // Error al insertar la venta en la tabla tb_ventas
+            throw new Exception("Error al procesar la compra.");
+        }
+    } catch (Exception $e) {
+        // Revertir la transacción en caso de error
+        $conexion->rollback();
+        $response = array("success" => false, "error" => $e->getMessage());
+    }
+
+    // Devolver la respuesta al cliente
+    header('Content-Type: application/json');
+    echo json_encode($response);
+
+    // Cerrar conexión
+    $conexion->close();
+}
+
+
 }
 
 ?>

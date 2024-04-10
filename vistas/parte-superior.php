@@ -1,5 +1,6 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="es" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -43,7 +44,7 @@
                         Admin Elements
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
+                        <a href="dash.php" class="sidebar-link">
                             <i class="fa-solid fa-list pe-2"></i>
                             Dashboard
                         </a>
@@ -69,7 +70,7 @@
                         </a>
                         <ul id="posts" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Realizar Venta</a>
+                                <a href="sales.php" class="sidebar-link">Realizar Venta</a>
                             </li>
                             <li class="sidebar-item">
                                 <a href="#" class="sidebar-link">Historial Venta</a>
@@ -135,6 +136,11 @@
                 </button>
                 <div class="navbar-collapse navbar">
                     <ul class="navbar-nav">
+                        <input name="user" type="hidden" class="nav-link dropdown-toggle" value="<?php echo $_SESSION['id_usuario']; ?>" readonly>
+                           
+                        <span style="color: orange" class="nav-link dropdown-toggle">
+                            <?php echo $_SESSION['nombres'].' '.$_SESSION['apellidos']; ?>
+                        </span>
                         <li class="nav-item dropdown">
                             <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
                                 <img src="image/profile.jpg" class="avatar img-fluid rounded" alt="">
