@@ -65,7 +65,7 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-cerrar">Cerrar</button>
-                                <button type="button" class="btn btn-warning btn-agregar">Agregar al Carro</button>
+                                <button type="button" class="btn btn-warning btn-agregar" id="id-agregar">Agregar al Carro</button>
                             </div>
                         </form>
                     </div>
@@ -277,6 +277,8 @@ $(document).ready(function () {
     $(document).ready(function () {
         // Manejar el clic en el botón de "Agregar al Carro"
         $('.btn-agregar').click(function () {
+            //aquí coloco el boton de agregar al carro para que se desactive
+            var botonAgregar = document.getElementById("id-agregar");
             // Obtener los datos del formulario
             var codigo = $('#id-codigo').val();
             var nombre = $('#id-nombre').val();
@@ -286,7 +288,7 @@ $(document).ready(function () {
 
             // Validar datos (puedes agregar más validaciones aquí si es necesario)
             //if (!codigo || !nombre || isNaN(precio) || isNaN(cantidad) || !mesa) {
-            if (isNaN(cantidad) || !mesa) {
+            if (isNaN(cantidad) || cantidad<=0 || cantidad % 1 !== 0 || !mesa) {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -358,6 +360,9 @@ $(document).ready(function () {
             success: function (response, textStatus, xhr) {
                 // Manejar la respuesta del servidor
                 if (response.success) {
+                    //ticket
+                    
+                    //ticket
                     // La compra se realizó con éxito, puedes mostrar un mensaje de éxito o redirigir a otra página
                     Swal.fire({
                         icon: 'success',

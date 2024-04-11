@@ -218,7 +218,7 @@ public function transaction($carrito, $id_usuario) {
         $id_mesa = $carrito[0]['mesa'];
         // Crear la venta en la tabla tb_ventas
         $sql_venta = "INSERT INTO tb_ventas (id_usuario, id_mesa, fecha_venta, total_venta)
-                      VALUES (?, ?, NOW(), 0)";
+                      VALUES (?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i'), 0)";
         
         $stmt_venta = $conexion->prepare($sql_venta);
         
@@ -290,7 +290,6 @@ public function transaction($carrito, $id_usuario) {
     // Cerrar conexión
     $conexion->close();
 }
-
 
 }
 

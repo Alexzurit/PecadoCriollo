@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-  <div class="wrapper">
+    <div class="wrapper" style="background: #3ADECA;">
     <div class="container main">
         <div class="row">
             <div class="col-md-6 side-image">

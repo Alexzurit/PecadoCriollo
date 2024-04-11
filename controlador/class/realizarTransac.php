@@ -1,6 +1,5 @@
 <?php
 include '../methods.php';
-
 // Datos del carrito obtenidos del cliente
 $carrito = $_POST['carrito'];
 // ID de usuario obtenido del cliente
