@@ -104,7 +104,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-success" id="finalizarCompraBtn">Finalizar Compra</button>
-            </div>
+                <div id="contenidoticket"></div>
+            </div>            
         </div>
     </div>
 </div>
@@ -237,6 +238,16 @@ $(document).ready(function () {
 
 
 </script>
+<!-- script para ticket
+<script>
+   function imprimirTicket(){
+        //$('#contenidoticket').html('<iframe id="frmticket" src="controlador/class/generarTicket.php"></iframe>');
+        $('#contenidoticket').html('<iframe id="frmticket" src="controlador/class/generarTicket.php"></iframe>');
+        $('#frmticket').get(0).contentWindow.focus();
+        $('#frmticket').get(0).contentWindow.print();
+        //console.log(response);
+    }
+</script>
 <!-- script para el carrito -->
 <script>
     // Arreglo para almacenar los elementos agregados al carrito
@@ -361,7 +372,7 @@ $(document).ready(function () {
                 // Manejar la respuesta del servidor
                 if (response.success) {
                     //ticket
-                    
+                    console.log('Datos del ticket:', response.ticket);
                     //ticket
                     // La compra se realizó con éxito, puedes mostrar un mensaje de éxito o redirigir a otra página
                     Swal.fire({
@@ -372,8 +383,9 @@ $(document).ready(function () {
                         timer: 2000
                     }).then(function () {
                         // Redirigir a otra página después de 2 segundos (opcional)
-                        window.location.href = 'sales.php';
+                        //window.location.href = 'sales.php';
                     });
+                    mostrarTicket(response.ticket);
                 } else {
                     console.log('Error al procesar la compra:', xhr.responseText);
                     // Hubo un error al procesar la compra, mostrar un mensaje de error
@@ -398,6 +410,21 @@ $(document).ready(function () {
             }
         });
     }
+    
+    function mostrarTicket(ticket) {
+        // Crear un iframe para mostrar el PDF del ticket
+        var iframe = document.createElement('iframe');
+        var url = 'controlador/class/generarTicket.php?ticket=' + JSON.stringify(ticket);
+        console.log('ticket recibido: ',ticket);
+        //iframe.src = 'generarTicket.php';
+        iframe.src = url;
+        iframe.width = '100%';
+        iframe.height = '600px';
+        iframe.style.border = 'none';
+
+        // Agregar el iframe al contenedor en la página
+        document.getElementById('contenidoticket').appendChild(iframe);
+    }
 
     $(document).ready(function () {
         // Manejar el clic en el botón "Finalizar Compra"
@@ -413,7 +440,7 @@ $(document).ready(function () {
             }
 
             // Procesar la compra
-            procesarCompra();
+            procesarCompra();            
         });
     });
 </script>

@@ -270,9 +270,14 @@ public function transaction($carrito, $id_usuario) {
 
             // Confirmar la transacción
             $conexion->commit();
-
+            //obtener ID venta recien insertada
+            $id_venta = $stmt_venta->insert_id;
+            $ticket = array(
+            "id_venta" => $id_venta,
+            "detalles_venta" => $this->obtenerDetallesVenta($id_venta)
+            );
             // La compra se realizó con éxito
-            $response = array("success" => true);
+            $response = array("success" => true, "ticket" => $ticket);
         } else {
             // Error al insertar la venta en la tabla tb_ventas
             throw new Exception("Error al procesar la compra.");
@@ -289,6 +294,96 @@ public function transaction($carrito, $id_usuario) {
 
     // Cerrar conexión
     $conexion->close();
+}
+
+public function obtenerIdVenta($id_usuario) {
+    // Obtener conexión desde la clase padre
+    $conexion = parent::conectar();
+    
+    // Verificar la conexión
+    if ($conexion->connect_error) {
+        die("Error de conexión: " . $conexion->connect_error);
+    }
+
+    // Consulta SQL para obtener el último ID de venta realizada por el usuario
+    $sql = "SELECT id_venta FROM tb_ventas WHERE id_usuario = ? ORDER BY id_venta DESC LIMIT 1";
+
+    // Preparar la consulta
+    $stmt = $conexion->prepare($sql);
+    
+    // Verificar la preparación de la consulta
+    if (!$stmt) {
+        die("Error al preparar la consulta: " . $conexion->error);
+    }
+
+    // Bind de parámetros
+    $stmt->bind_param("i", $id_usuario);
+    
+    // Ejecutar la consulta
+    if (!$stmt->execute()) {
+        die("Error al ejecutar la consulta: " . $stmt->error);
+    }
+
+    // Ejecutar la consulta
+    //$stmt->execute();
+
+    // Vincular el resultado
+    $stmt->bind_result($id_venta);
+
+    // Obtener el resultado
+    if (!$stmt->fetch()) {
+        // No se encontraron resultados
+        return null;
+    }
+
+    // Cerrar la conexión y liberar recursos
+    $stmt->close();
+    $conexion->close();
+
+    // Retornar el ID de la última venta realizada por el usuario
+    echo $id_venta;
+    return $id_venta;
+}
+
+public function obtenerDetallesVenta($id_venta) {
+    // Obtener conexión desde la clase padre
+    $conexion = parent::conectar();
+    
+    // Verificar la conexión
+    if ($conexion->connect_error) {
+        die("Error de conexión: " . $conexion->connect_error);
+    }
+
+    // Consulta SQL para obtener los detalles de la venta
+    $sql = "SELECT v.id_venta, v.id_usuario, v.id_mesa, v.fecha_venta,
+                   dv.id_detalle, dv.id_producto, dv.cantidad_vendida, dv.precio_venta, dv.subtotal,
+                   p.nombre_prod
+            FROM tb_ventas v
+            INNER JOIN tb_detalle_venta dv ON v.id_venta = dv.id_venta
+            INNER JOIN tb_producto p ON dv.id_producto = p.id_producto
+            WHERE v.id_venta = ?";
+
+    // Preparar la consulta
+    $stmt = $conexion->prepare($sql);
+
+    // Bind de parámetros
+    $stmt->bind_param("i", $id_venta);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+
+    // Obtener el resultado
+    $result = $stmt->get_result();
+
+    // Obtener los detalles de la venta como un arreglo asociativo
+    $detalles_venta = $result->fetch_all(MYSQLI_ASSOC);
+
+    // Cerrar la conexión y liberar recursos
+    $stmt->close();
+    $conexion->close();
+
+    // Retornar los detalles de la venta
+    return $detalles_venta;
 }
 
 }
