@@ -386,6 +386,9 @@ $(document).ready(function () {
                         //window.location.href = 'sales.php';
                     });
                     mostrarTicket(response.ticket);
+                    carrito=[]; //vaciar carrito después de la compra exitosa
+                    $('#tablaCarrito tbody').empty(); // Vaciar el contenido de la tabla
+                    $('#carritoModal').modal('hide'); // Cerrar el modal
                 } else {
                     console.log('Error al procesar la compra:', xhr.responseText);
                     // Hubo un error al procesar la compra, mostrar un mensaje de error
@@ -412,18 +415,23 @@ $(document).ready(function () {
     }
     
     function mostrarTicket(ticket) {
+        // Construir la URL con el parámetro del ticket
+        var url = 'controlador/class/generarTicket.php?ticket=' + encodeURIComponent(JSON.stringify(ticket));
         // Crear un iframe para mostrar el PDF del ticket
         var iframe = document.createElement('iframe');
-        var url = 'controlador/class/generarTicket.php?ticket=' + JSON.stringify(ticket);
-        console.log('ticket recibido: ',ticket);
-        //iframe.src = 'generarTicket.php';
+        iframe.id = 'frmticket';
         iframe.src = url;
-        iframe.width = '100%';
-        iframe.height = '600px';
+        iframe.style.width = '100%';
+        iframe.style.height = '600px';
         iframe.style.border = 'none';
 
         // Agregar el iframe al contenedor en la página
+        document.getElementById('contenidoticket').innerHTML = ''; // Limpiar contenido existente
         document.getElementById('contenidoticket').appendChild(iframe);
+        document.getElementById('contenidoticket').style.display = 'none'; //ocultar el contenido
+        // Enfocar en el iframe y luego imprimir su contenido
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
     }
 
     $(document).ready(function () {
