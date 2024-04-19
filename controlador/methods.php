@@ -386,6 +386,81 @@ public function obtenerDetallesVenta($id_venta) {
     return $detalles_venta;
 }
 
+public function salesReport($fechaInicio,$fechaFin){
+    // Obtener conexión desde la clase padre
+    $conexion = parent::conectar();
+    
+    // Verificar la conexión
+    if ($conexion->connect_error) {
+        die("Error de conexión: " . $conexion->connect_error);
+    }
+    
+    $sql = "SELECT 
+                total_ventas_aprobadas,
+                total_ventas_canceladas,
+                num_ventas_aprobadas,
+                num_ventas_canceladas,
+                num_ventas_realizadas,
+                cartas_vendidas,
+                menu_vendidos
+            FROM
+                (SELECT SUM(total_venta) AS total_ventas_aprobadas
+                FROM tb_ventas
+                WHERE estado_venta = 'APROBADO'
+                and fecha_venta BETWEEN ? AND ?) AS t1
+            INNER JOIN
+                (SELECT SUM(total_venta) AS total_ventas_canceladas
+                FROM tb_ventas
+                WHERE estado_venta = 'CANCELADO'
+                and fecha_venta BETWEEN ? AND ?) AS t2 ON 1=1
+            INNER JOIN
+                (SELECT COUNT(*) AS num_ventas_aprobadas
+                FROM tb_ventas
+                WHERE estado_venta = 'APROBADO'
+                and fecha_venta BETWEEN ? AND ?) AS t3 ON 1=1
+            INNER JOIN
+                (SELECT 
+                    COUNT(*) AS num_ventas_canceladas
+                FROM 
+                    tb_ventas
+                WHERE 
+                    estado_venta = 'CANCELADO' AND
+                    fecha_venta BETWEEN ? AND ?) AS t5 ON 1=1
+            INNER JOIN
+                (SELECT 
+                    COUNT(*) AS num_ventas_realizadas
+                FROM 
+                    tb_ventas
+                WHERE 
+                    fecha_venta BETWEEN ? AND ?) AS t6 ON 1=1
+            INNER JOIN
+                (SELECT
+                    SUM(CASE WHEN tpl.nombre_platos = 'CARTAS' THEN tdv.cantidad_vendida ELSE 0 END) AS cartas_vendidas,
+                    SUM(CASE WHEN tpl.nombre_platos = 'MENU' THEN tdv.cantidad_vendida ELSE 0 END) AS menu_vendidos
+                FROM
+                    tb_ventas AS tv
+                    INNER JOIN tb_detalle_venta AS tdv ON tv.id_venta = tdv.id_venta
+                    INNER JOIN tb_producto AS tp ON tdv.id_producto = tp.id_producto
+                    INNER JOIN tb_platos AS tpl ON tp.tipo_plato = tpl.id_platos
+                WHERE
+                    tv.estado_venta = 'APROBADO'
+                    AND tv.fecha_venta BETWEEN ? AND ?) AS t4 ON 1=1;
+            ";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param('ssssssssssss', $fechaInicio, $fechaFin, $fechaInicio, $fechaFin, $fechaInicio, $fechaFin, $fechaInicio, $fechaFin, $fechaInicio, $fechaFin, $fechaInicio, $fechaFin);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result) {
+        $reporte = $result->fetch_assoc();
+        return $reporte;
+    } else {
+        echo 'Error en la consulta SQL';
+    }
+
+    $stmt->close();
+}
+
 }
 
 ?>

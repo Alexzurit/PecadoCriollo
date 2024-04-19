@@ -76,7 +76,7 @@
                                 <a href="saleshist.php" class="sidebar-link">Historial Venta</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Reporte</a>
+                                <a href="report.php" class="sidebar-link">Reporte</a>
                             </li>
                         </ul>
                     </li>
