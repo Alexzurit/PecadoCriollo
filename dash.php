@@ -51,7 +51,7 @@
         <!-- FIN -->
         <div class="row">
             <div class="col-12 col-md-6 d-flex">
-                <div class="card flex-fill border-0 illustration">
+                <div class="card flex-fill border-black border-2 illustration">
                     <div class="card-header bg-secondary">
                         <p class="text-dark text-uppercase fw-bold text-center mb-0">
                             Cantidad Vendidas en la semana
@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 d-flex">
-                <div class="card flex-fill border-0">
+                <div class="card flex-fill border-black border-2">
                     <div class="card-header bg-secondary">
                         <p class="text-dark text-uppercase fw-bold text-center mb-0">
                             Monto Recaudado de cada día
@@ -82,7 +82,7 @@
             </div>
         </div>
         <!--Table Elements-->
-        <div class="card border-0">
+        <div class="card border-secondary border-2">
             <div class="card-header">
                 <h5 class="text-center">
                     Balance recaudado de todos los meses

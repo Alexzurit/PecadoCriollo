@@ -16,51 +16,56 @@
         border: 1px solid red;
         box-shadow: 0 0 0 0.2rem rgba(250, 16, 0, 0.18);
     }
-
+    
 </style>
 <?php require_once 'vistas/parte-superior.php'; ?>
 <!-- ========= Main content section of dashboard ======= -->
-<h1 class="text-center mt-3" >Añade Nuevos Platos</h1>
-<div class="modal-body mx-3">
-    
-    <form id="formProducto" method="POST" action="controlador/class/registro.php" enctype="multipart/form-data">
+<main class="content px-3 py-2">
+    <div class="container-fluid">
+        <div class="card border-0 fondograd">
+            <div class="card-header">
+                <div class="mb-3 text-center">
+                    <h4 class="text-center mt-3" >Añade Nuevos Platos</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="formProducto" method="POST" action="controlador/class/registro.php" enctype="multipart/form-data">
 
-        <div class="form-group">
-            <label for="id-codigo" class="form-label">Código</label>
-            <input type="text" class="form-control" name="codigo" id="id-codigo" value="0" readonly>
+                    <div class="form-group">
+                        <label for="id-codigo" class="form-label">Código</label>
+                        <input type="text" class="form-control" name="codigo" id="id-codigo" value="0" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id-nombre" class="form-label">Nombre Producto</label>
+                        <input type="text" class="form-control" name="nombre" id="id-nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id-categoria" class="form-label">Elija tipo de plato</label>
+                        <select class="form-control" name="tipo" id="id-tipo">
+                            <option value="">Seleccione tipo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id-precio" class="form-label">Precio</label>
+                        <input type="text" class="form-control" name="precio" id="id-precio">
+                    </div>
+                    <!--
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-cerrar">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Grabar</button>
+                    </div>
+                    -->
+                    <div class="d-grid  mt-3">
+                        <button class="btn btn-success" type="submit">Registrar Producto</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label for="id-nombre" class="form-label">Nombre Producto</label>
-            <input type="text" class="form-control" name="nombre" id="id-nombre">
-        </div>
-
-        <div class="form-group">
-            <label for="id-categoria" class="form-label">Elija tipo de plato</label>
-            <select class="form-control" name="tipo" id="id-tipo">
-                <option value="">Seleccione tipo</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="id-precio" class="form-label">Precio</label>
-            <input type="text" class="form-control" name="precio" id="id-precio">
-        </div>
-        <!--
-        <div class="modal-footer mt-3">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-cerrar">Cerrar</button>
-            <button type="submit" class="btn btn-primary">Grabar</button>
-        </div>
-        -->
-        <div class="d-grid  mt-3">
-            <button class="btn btn-success" type="submit">Registrar Producto</button>
-        </div>
-    </form>
-
-
-
-</div>
-
+    </div>
+</main>
 <?php require_once 'vistas/parte-inferior.php'; ?>
 
 <!--Scrip para mensajes TOastr-->
