@@ -22,11 +22,20 @@
 	  border: 1px solid red;
 	  box-shadow: 0 0 0 0.2rem rgba(250, 16, 0, 0.18);
 	}
-	
+        .gradient{
+            background: rgb(34,193,195);
+            background: radial-gradient(circle, rgba(34,193,195,1) 0%,
+                rgba(120,214,216,1) 0%, rgba(71,202,204,1) 0%, rgba(254,254,254,1) 0%,
+                rgba(247,247,247,1) 0%, rgba(72,89,82,1) 0%, rgba(150,186,171,1) 0%, rgba(0,0,0,1) 0%,
+                rgba(46,56,52,1) 53%, rgba(0,0,0,1) 100%);
+        }
+        .loggrad{
+            
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper" style="background: #3ADECA;">
+    <div class="wrapper gradient">
     <div class="container main">
         <div class="row">
             <div class="col-md-6 side-image">
@@ -40,7 +49,7 @@
                 
             </div>
 
-            <div class="col-md-6 right">
+            <div class="col-md-6 right loggrad">
                 
                 <div class="input-box">
                    
