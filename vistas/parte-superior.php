@@ -6,6 +6,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- iconoPestaña -->
+    <link rel="icon" href="image/platorste.png" type="image/png">
     <!-- Charts.js para graficos en el dashboard -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!--lo necesario para validaciones y mensajes del CRUD-->
