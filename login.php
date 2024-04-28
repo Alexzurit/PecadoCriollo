@@ -44,7 +44,7 @@
                 
                 <img src="" alt="">
                 <div class="text">
-                    <p>Alex Eduardo Zurita Julca<i>- zarblex</i></p>
+                    <p>Restaurante Pecado Criollo<i>- AZJ</i></p>
                 </div>
                 
             </div>
