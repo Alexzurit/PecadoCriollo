@@ -1,5 +1,5 @@
 <style>
-    .modal-header{
+.modal-header{
         color:#fff;
         background: #634B7E;
         display: flex;
@@ -15,7 +15,6 @@
         border: 1px solid red;
         box-shadow: 0 0 0 0.2rem rgba(250, 16, 0, 0.18);
     }
-
 </style>
 <?php require_once 'vistas/parte-superior.php'; ?>
 
