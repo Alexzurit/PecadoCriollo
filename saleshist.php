@@ -37,8 +37,12 @@
               </div>
           </div>
           <div class="modal-footer">
+              <button type="button" class="btn btn-success btn-lg" id="btn-print">
+                  <i class="bi bi-printer-fill bi-lg"></i>
+              </button>
               <button type="button" class="btn btn-secondary" id="btn-cerrar" data-bs-dismiss="modal">Cerrar</button>
               <!--<button type="button" class="btn btn-danger" id="id-cancelar">Cancelar Venta</button>-->
+              <div id="contenidoticket"></div>
           </div>
         </div>
       </div>
@@ -211,54 +215,32 @@ $(document).ready(function () {
         //Fin evento click Boton DEtalle
         
         /*Inicio evento Click Boton CANCELAR*/
-        /*$('#exampleModal').on('click', '.btn-danger', function () {
-            var idVenta = $('#id-venta').val(); // Obtener el ID de la venta del input
-            //Inicio deshabitlitar boton CANCELAR
-            
-            //Fin deshabilitar boton CANCELAR
-            Swal.fire({
-                title: '¿Seguro de Cancelar?',
-                text: 'Venta con ID: ' + idVenta ,
-                icon: 'error',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Aceptar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // El usuario ha confirmado la eliminación, realiza la solicitud Ajax para eliminar el producto
-                    $.ajax({
-                        url: "Controlador/class/cancelarVenta.php",
-                        type: "POST",
-                        dataType: 'json',
-                        data: { id_venta: idVenta },
-                        success: function (response) {
-                                // Eliminación exitosa, redirige a la página deseada
-                                if (response.success) {
-                                    toastr.success(response.message);
-                                    setTimeout(function (){
-                                        window.location = "ventasHistorial.php";
-                                    },2000); //redirecciona después de 2 segundos
-                                    // Realizar alguna acción adicional después de cancelar la venta, como recargar la tabla, etc.
-
-                                } else {
-                                    toastr.error(response.message);
-                                }
-                        },
-                        error: function () {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Error en la solicitud Ajax para eliminar el producto.'
-                            });
-                        }
-                    });
-                }
-            });//Fin Swalfire
-        });
+        
         /*Fin evento Click Boton CANCELAR*/
     });
 });
 
+</script>
+<script>
+    document.getElementById("btn-print").addEventListener("click", function(){
+        const dato = document.getElementById("id-venta").value;
+        //console.log(dato);
+        // Construir la URL con el parámetro del ticket
+        var url = 'controlador/class/generar_ticket.php?dato=' + dato;
+        // Crear un iframe para mostrar el PDF del ticket
+        var iframe = document.createElement('iframe');
+        iframe.id = 'frmticket';
+        iframe.src = url;
+        iframe.style.width = '100%';
+        iframe.style.height = '600px';
+        iframe.style.border = 'none';
+
+        // Agregar el iframe al contenedor en la página
+        document.getElementById('contenidoticket').innerHTML = ''; // Limpiar contenido existente
+        document.getElementById('contenidoticket').appendChild(iframe);
+        document.getElementById('contenidoticket').style.display = 'none'; //ocultar el contenido
+        // Enfocar en el iframe y luego imprimir su contenido
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+    });
 </script>
