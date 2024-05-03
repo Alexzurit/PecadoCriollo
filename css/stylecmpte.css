@@ -23,13 +23,13 @@ body {
 
 header {
   padding: 10px 0;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
 }
 
 #logo {
   text-align: left;
   margin-bottom: 10px;
-  width:15%;
+  width:20%;
  float: left;
 }
 
@@ -121,7 +121,8 @@ table {
 }
 
 table tr:nth-child(2n-1) td {
-  
+  background-color: white;
+  text-align: center;
 }
 
 table th,
@@ -143,7 +144,7 @@ table th {
 
 table .service,
 table .desc {
-  text-align: left;
+  text-align: center;
 }
 
 table td {
@@ -163,7 +164,7 @@ table td.total {
 }
 
 table td.grand {
-  border-top: 1px solid #5D6975;;
+  border-top: 1px solid #5D6975;
 }
 
 #notices .notice {
