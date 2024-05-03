@@ -20,7 +20,7 @@ function getPlantilla($ticket){
     <body>
         <header>
             <div id="logo">
-                <img src="image/logorst.png" width="100" height="100">
+                <img src="../../image/logorst.png" width="100" height="100">
             </div>
             <div id="company" class="clearfix">
                 <div><h2>Restaurant Cevicheria</h2></div>
