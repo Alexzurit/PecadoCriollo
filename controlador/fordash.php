@@ -7,9 +7,9 @@ class fordash extends Conexion{
         if ($conexion->connect_error) {
         die("Conexión fallida: " . $conexion->connect_error);
         }
-        
+        $conexion->query("SET lc_time_names = 'es_ES'");
         // Consulta para obtener datos de ventas
-        $sql = "SELECT 
+        /*$sql = "SELECT 
                     DAYNAME(tv.fecha_venta) AS dia_semana,
                     SUM(CASE WHEN tpl.nombre_platos = 'CARTAS' THEN tdv.cantidad_vendida ELSE 0 END) AS cartas,
                     SUM(CASE WHEN tpl.nombre_platos = 'MENU' THEN tdv.cantidad_vendida ELSE 0 END) AS menu
@@ -24,8 +24,37 @@ class fordash extends Conexion{
                 GROUP BY
                     dia_semana
                 ORDER BY
-                    FIELD(dia_semana, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')";
-
+                    FIELD(dia_semana, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')";*/
+        
+        //Nueva consulta que muestra el nro de platos vendidos en cada día desde hoy hasta 6 días atras
+        $sql = "SELECT 
+                    DATE_FORMAT(all_days.fecha, '%e-%b') AS dia_semana,
+                    COALESCE(SUM(CASE WHEN tpl.nombre_platos = 'CARTAS' THEN tdv.cantidad_vendida ELSE 0 END), 0) AS cartas,
+                    COALESCE(SUM(CASE WHEN tpl.nombre_platos = 'MENU' THEN tdv.cantidad_vendida ELSE 0 END), 0) AS menu
+                FROM
+                    (SELECT CURDATE() - INTERVAL 6 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 5 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 4 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 3 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 2 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 1 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() AS fecha) AS all_days
+                LEFT JOIN tb_ventas tv ON DATE(tv.fecha_venta) = all_days.fecha
+                    AND tv.estado_venta = 'APROBADO'
+                LEFT JOIN tb_detalle_venta AS tdv ON tv.id_venta = tdv.id_venta
+                LEFT JOIN tb_producto AS tp ON tdv.id_producto = tp.id_producto
+                LEFT JOIN tb_platos AS tpl ON tp.tipo_plato = tpl.id_platos
+                GROUP BY
+                    all_days.fecha
+                ORDER BY
+                    all_days.fecha ASC;";
+        
         $resultado = $conexion->query($sql);
         
         $data = []; // Array para almacenar los datos
@@ -52,7 +81,7 @@ class fordash extends Conexion{
         $conexion->query("SET lc_time_names = 'es_ES'");
 
         // Consulta para obtener el monto recaudado en los últimos 7 días
-        $sql = "SELECT
+        /*$sql = "SELECT
                     DATE_FORMAT(fecha_venta, '%W') AS dia_semana,
                     SUM(total_venta) AS total_venta_recaudado
                 FROM 
@@ -64,6 +93,29 @@ class fordash extends Conexion{
                     dia_semana
                 ORDER BY
                     FIELD(dia_semana, 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo')";
+        */
+        //nueva consulta que toma los resultados de hoy hasta 7 días atras
+        $sql = "SELECT
+                    DATE_FORMAT(all_days.fecha, '%e-%M') AS dia_semana,
+                    COALESCE(SUM(tv.total_venta), 0) AS total_venta_recaudado
+                FROM
+                    (SELECT CURDATE() - INTERVAL 6 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 5 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 4 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 3 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 2 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() - INTERVAL 1 DAY AS fecha
+                     UNION ALL
+                     SELECT CURDATE() AS fecha) AS all_days
+                LEFT JOIN tb_ventas tv ON DATE(tv.fecha_venta) = all_days.fecha
+                                        AND tv.estado_venta = 'APROBADO'
+                GROUP BY all_days.fecha
+                ORDER BY all_days.fecha ASC;";
 
         $resultado = $conexion->query($sql);
 
