@@ -178,7 +178,8 @@
                                 data: 'tipo_plato',
                                 render: function(data, type, row) {
                                     // Si el tipo_plato es 1, mostrar "MENU", de lo contrario, mostrar "CARTA"
-                                    return data === 1 ? 'MENU' : 'CARTAS';
+                                    //return data === 1 ? 'MENU' : 'CARTAS';
+                                    return data === 1 ? 'MENU' : data === 2 ? 'CARTA' : data === 3 ? 'BEBIDAS' : 'DESCONOCIDO';
                                 }
                             },
                             { data: 'precio_pro' },

@@ -1,6 +1,13 @@
-<?php session_start(); ?>
+<?php
+session_start(); 
+// Verificar si la sesión ya está iniciada
+if (isset($_SESSION['usuario'])) {
+    header("Location: dash.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
-<html>
+<html lang="sp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

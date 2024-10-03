@@ -70,6 +70,10 @@
                             <div class="col text-end" id="numCartasVendidos">Valor</div>
                         </div>
                         <div class="row border-bottom py-2">
+                            <div class="col">N° BEBIDAS vendidas</div>
+                            <div class="col text-end" id="numBebidasVendidos">Valor</div>
+                        </div>
+                        <div class="row border-bottom py-2">
                             <div class="col">Total APROBADAS</div>
                             <div class="col text-end" id="totalAprobadas">Valor</div>
                         </div>
@@ -142,6 +146,7 @@ $(document).ready(function () {
                 $('#numVentasRealizadas').text(data.num_ventas_realizadas);
                 $('#numMenusVendidos').text(data.menu_vendidos);
                 $('#numCartasVendidos').text(data.cartas_vendidas);
+                $('#numBebidasVendidos').text(data.bebidas_vendidas);
                 $('#totalAprobadas').text(data.num_ventas_aprobadas);
                 $('#totalCanceladas').text(data.num_ventas_canceladas);
                 $('#montoAprobado').text(data.total_ventas_aprobadas);

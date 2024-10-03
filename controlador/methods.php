@@ -402,7 +402,8 @@ public function salesReport($fechaInicio,$fechaFin){
                 num_ventas_canceladas,
                 num_ventas_realizadas,
                 cartas_vendidas,
-                menu_vendidos
+                menu_vendidos,
+                bebidas_vendidas
             FROM
                 (SELECT SUM(total_venta) AS total_ventas_aprobadas
                 FROM tb_ventas
@@ -436,7 +437,8 @@ public function salesReport($fechaInicio,$fechaFin){
             INNER JOIN
                 (SELECT
                     SUM(CASE WHEN tpl.nombre_platos = 'CARTAS' THEN tdv.cantidad_vendida ELSE 0 END) AS cartas_vendidas,
-                    SUM(CASE WHEN tpl.nombre_platos = 'MENU' THEN tdv.cantidad_vendida ELSE 0 END) AS menu_vendidos
+                    SUM(CASE WHEN tpl.nombre_platos = 'MENU' THEN tdv.cantidad_vendida ELSE 0 END) AS menu_vendidos,
+                    SUM(CASE WHEN tpl.nombre_platos = 'BEBIDAS' THEN tdv.cantidad_vendida ELSE 0 END) AS bebidas_vendidas
                 FROM
                     tb_ventas AS tv
                     INNER JOIN tb_detalle_venta AS tdv ON tv.id_venta = tdv.id_venta
@@ -459,6 +461,64 @@ public function salesReport($fechaInicio,$fechaFin){
     }
 
     $stmt->close();
+}
+
+//Método para cambiar contraseña
+public function cambiarPassword($usuario, $passwordActual, $nuevaPassword, $repetirPassword) {
+    $conexion = parent::conectar();
+
+    // Preparamos la consulta para evitar inyecciones SQL
+    $sql = "SELECT * FROM tb_usuarios WHERE usuario = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param('s', $usuario); // 's' indica que el parámetro es una cadena de texto
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if ($resultado && $resultado->num_rows > 0) {
+        $datosUsuario = $resultado->fetch_assoc();
+        $passwordExistente = $datosUsuario['clave'];
+
+        // Verificar que la contraseña actual es correcta
+        if (password_verify($passwordActual, $passwordExistente)) {
+            // Verificar que la nueva contraseña y su repetición coinciden
+            if ($nuevaPassword === $repetirPassword) {
+                // Encriptar la nueva contraseña
+                $nuevaPasswordHash = password_hash($nuevaPassword, PASSWORD_DEFAULT);
+
+                // Preparamos la consulta de actualización
+                $updateSql = "UPDATE tb_usuarios SET clave = ? WHERE usuario = ?";
+                $stmtUpdate = $conexion->prepare($updateSql);
+                $stmtUpdate->bind_param('ss', $nuevaPasswordHash, $usuario); // 'ss' indica dos cadenas de texto
+
+                if ($stmtUpdate->execute()) {
+                    return [
+                        'status' => 'success',
+                        'message' => 'Contraseña actualizada correctamente.'
+                    ];
+                } else {
+                    return [
+                        'status' => 'error',
+                        'message' => 'Error al actualizar la contraseña.'
+                    ];
+                }
+            } else {
+                return [
+                    'status' => 'error',
+                    'message' => 'Las nuevas contraseñas no coinciden.'
+                ];
+            }
+        } else {
+            return [
+                'status' => 'error',
+                'message' => 'La contraseña actual es incorrecta.'
+            ];
+        }
+    } else {
+        return [
+            'status' => 'error',
+            'message' => 'Usuario no encontrado.'
+        ];
+    }
 }
 
 }

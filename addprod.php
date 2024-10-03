@@ -38,7 +38,7 @@
 
                     <div class="form-group">
                         <label for="id-nombre" class="form-label">Nombre Producto</label>
-                        <input type="text" class="form-control" name="nombre" id="id-nombre">
+                        <input type="text" class="form-control" name="nombre" id="id-nombre" oninput="this.value = this.value.toUpperCase()">
                     </div>
 
                     <div class="form-group">

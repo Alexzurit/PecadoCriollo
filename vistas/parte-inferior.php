@@ -57,3 +57,38 @@
 </body>
 
 </html>
+
+<script>
+//document.getElementById('logout-button').addEventListener('click', async function(e) {
+//    e.preventDefault(); // Evitar la acción por defecto del enlace
+//
+//    try {
+//        // Realizamos la solicitud al servidor para cerrar la sesión
+//        const response = await fetch('controlador/class/logout.php', {
+//            method: 'POST',
+//            headers: {
+//                'Content-Type': 'application/x-www-form-urlencoded'
+//            }
+//        });
+//
+//        if (response.ok) {
+//            // Redirigir al usuario al login
+//            window.location.href = 'login.php';
+//        } else {
+//            console.error('Error al cerrar sesión.');
+//        }
+//    } catch (error) {
+//        console.error('Error al procesar la solicitud de cierre de sesión:', error);
+//    }
+//});
+</script>
+//Scrip reload page for security ctmre gaa
+<script>
+  // Recargar la página si el usuario navega hacia atrás
+  window.onpageshow = function(event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  };
+</script>
+

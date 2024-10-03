@@ -1,6 +1,18 @@
-<?php session_start(); ?>
+<?php 
+    session_start();
+    
+    if(!isset($_SESSION['usuario'])){
+        header("location: login.php");
+        exit(); // Es importante salir del script después de redirigir
+    }
+    
+    // Evitar que el navegador almacene en caché la página
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+?>
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="dark">
+<html lang="sp" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -84,26 +96,11 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link collapsed" data-bs-target="#auth" data-bs-toggle="collapse"
-                        aria-expanded="false"><i class="fa-regular fa-user pe-2"></i>
-                        Auth
-                        </a>
-                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                            <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Login</a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Register</a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Forgot Password</a>
-                            </li>
-                        </ul>
-                    </li>
+                    
                     <li class="sidebar-header">
-                        Multi Level Menú
+                        Opciones Adminitrador
                     </li>
+                    <!-- 
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#multi" data-bs-toggle="collapse"
                         aria-expanded="false"><i class="fa-solid fa-share-nodes pe-2"></i>
@@ -121,6 +118,23 @@
                                         <a href="#" class="sidebar-link">Level 1.2</a>
                                     </li>
                                 </ul>
+                            </li>
+                        </ul>
+                    </li>comment -->
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#auth" data-bs-toggle="collapse"
+                        aria-expanded="false"><i class="fa-regular fa-user pe-2"></i>
+                        Auth
+                        </a>
+                        <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+<!--                                <a href="#" class="sidebar-link">Nuevo Usuario</a>-->
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="changepass.php" class="sidebar-link">Cambiar contraseña</a>
+                            </li>
+                            <li class="sidebar-item">
+<!--                                <a href="#" class="sidebar-link">Forgot Password</a>-->
                             </li>
                         </ul>
                     </li>
@@ -150,9 +164,9 @@
                                 <img src="image/pc.png" class="avatar img-fluid rounded" alt="">
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#" class="dropdown-item">Profile</a>
-                                <a href="#" class="dropdown-item">Setting</a>
-                                <a href="#" class="dropdown-item">Logout</a>
+                                <a href="#" class="dropdown-item disabled">Profile</a>
+                                <a href="#" class="dropdown-item disabled">Setting</a>
+                                <a href="controlador/class/logout.php" id="logout-button" class="dropdown-item">Logout</a>
                             </div>
                         </li>
                     </ul>

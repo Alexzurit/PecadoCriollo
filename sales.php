@@ -127,6 +127,7 @@
                         <option value="">Todos</option>
                         <option value="1">MENU</option>
                         <option value="2">CARTAS</option>
+                        <option value="3">BEBIDAS</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -372,7 +373,7 @@ $(document).ready(function () {
                 // Manejar la respuesta del servidor
                 if (response.success) {
                     //ticket
-                    console.log('Datos del ticket:', response.ticket);
+                    //console.log('Datos del ticket:', response.ticket);
                     //ticket
                     // La compra se realizó con éxito, puedes mostrar un mensaje de éxito o redirigir a otra página
                     Swal.fire({

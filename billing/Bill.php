@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima'); // Configura la zona horaria a Lima, Perú
 
-function getPlantilla2($ticket){
+function getFactura($ticket){
     // Obtener la fecha de venta del primer detalle de venta (suponiendo que la fecha es la misma para todos los detalles)
     $fecha_venta_str = $ticket[0]['fecha_venta'];
     
@@ -23,15 +23,21 @@ function getPlantilla2($ticket){
             </div>
             <br>
             <div id="company">
+                <div>RUC:nro de ruc</div>
+                <div>Fredy Alberto Julca Chinchay</div>
                 <div><span>FECHA:</span>' . $fecha_formateada . '</div> <!-- Ajustado para mostrar la fecha actual -->
                 <br>
                 <div>Encuéntranos en</div>
                 <div>Av. Pacasmayo Mz B lote 22 - San Martín de Porres - Lima</div>
-                <div>*******509</div>
+                <div>935724298</div>
             </div>
         </header>
         <main>
-            <p>Platos escogidos <strong>MESA ' . $ticket[0]['id_mesa'] . '</strong></p>
+            <!--<p>Platos escogidos <strong>MESA ' . $ticket[0]['id_mesa'] . '</strong></p>-->
+            <p>RUC/DNI Cliente: aquí va el ruc o dni</p>
+            <p>Razón Social/Nombres Cliente: <br>
+            aqui va el rs o nombres
+            </p>
             <table>
                 <thead>
                     <tr>
@@ -54,23 +60,35 @@ function getPlantilla2($ticket){
                         <td class="qty">' . ($indice + 1) . '</td>
                         <td class="desc">' . $producto['nombre_prod'] . '</td>
                         <td class="qty">' . $producto['cantidad_vendida'] . '</td>
-                        <td class="total">' . $subtotal . '</td>
+                        <td class="total">' . number_format($subtotal, 2) . '</td>
                     </tr>';
     }
-
+    
+    // Calcular Base Imponible y IGV
+    $base_imponible = $total / 1.18; // Base Imponible (monto sin IGV)
+    $igv = $total - $base_imponible; // IGV 18%
+    
     $contenido .= '
                     <tr>
+                        <td class="qty" colspan="3"><strong>Base Imponible</strong></td>
+                        <td class="total"><strong>S/' . number_format($base_imponible, 2) . '</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="qty" colspan="3"><strong>IGV 18%</strong></td>
+                        <td class="total"><strong>S/' . number_format($igv, 2) . '</strong></td>
+                    </tr>
+                    <tr>
                         <td class="qty" colspan="3"><strong>TOTAL</strong></td>
-                        <td class="total"><strong>S/' . $total . '</strong></td>
+                        <td class="total"><strong>S/' . number_format($total, 2) . '</strong></td>
                     </tr>
                 </tbody> 
             </table>
             <div id="company">
             <p>Gracias por elegir nuestro restaurante para tu comida ¡Esperamos verte pronto!</p>
             </div>
-            <div id="company">
+            <!--<div id="company">
             <b>¡Este no es un comprobante de pago!</b>
-            </div>
+            </div>-->
         </main>
         <footer>
         </footer>
