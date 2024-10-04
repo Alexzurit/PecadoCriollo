@@ -26,8 +26,8 @@ function getPlantilla2($ticket){
                 <div><span>FECHA:</span>' . $fecha_formateada . '</div> <!-- Ajustado para mostrar la fecha actual -->
                 <br>
                 <div>Encuéntranos en</div>
-                <div>Av. Pacasmayo Mz B lote 22 - San Martín de Porres - Lima</div>
-                <div>*******509</div>
+                <div>Av. Pacasmayo Mz B lote 11-A. Urb. Los Robles de Sta. Rosa - SMP - Lima</div>
+                <div>915 057 162</div>
             </div>
         </header>
         <main>

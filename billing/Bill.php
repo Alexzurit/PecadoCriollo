@@ -23,13 +23,13 @@ function getFactura($ticket,$rucDni, $razonSocial){
             </div>
             <br>
             <div id="company">
-                <div>RUC:nro de ruc</div>
-                <div>Fredy Alberto Julca Chinchay</div>
+                <div>RUC:10458577213</div>
+                <div>FREDY ALBERTO JULCA CHINCHAY</div>
                 <div><span>FECHA:</span>' . $fecha_formateada . '</div> <!-- Ajustado para mostrar la fecha actual -->
                 <br>
                 <div>Encuéntranos en</div>
-                <div>Av. Pacasmayo Mz B lote 22 - San Martín de Porres - Lima</div>
-                <div>935724298</div>
+                <div>Av. Pacasmayo Mz B lote 11-A. Urb. Los Robles de Sta. Rosa - SMP - Lima</div>
+                <div>915 057 162</div>
             </div>
         </header>
         <main>
