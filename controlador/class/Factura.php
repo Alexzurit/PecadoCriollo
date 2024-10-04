@@ -5,6 +5,8 @@ include '../methods.php';
 
 //recibir el id
 $dato = $_GET['dato'];
+$rucDni = $_GET['ruc_dni'];
+$razonSocial = $_GET['razon_social'];
 
 //llamar a la clase methods (instanciar)
 
@@ -30,7 +32,7 @@ $mpdfConfig=array(
 //FIN
 $mpdf = new \Mpdf\Mpdf($mpdfConfig);
 $css= file_get_contents("../../css/stylecmpte.css");//Para agregar estilos
-$plantilla = getFactura($detalle);
+$plantilla = getFactura($detalle,$rucDni, $razonSocial);
 $mpdf->WriteHTML($css, \Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($plantilla, \Mpdf\HTMLParserMode::HTML_BODY);
 

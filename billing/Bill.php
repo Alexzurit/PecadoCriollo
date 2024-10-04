@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima'); // Configura la zona horaria a Lima, Perú
 
-function getFactura($ticket){
+function getFactura($ticket,$rucDni, $razonSocial){
     // Obtener la fecha de venta del primer detalle de venta (suponiendo que la fecha es la misma para todos los detalles)
     $fecha_venta_str = $ticket[0]['fecha_venta'];
     
@@ -34,9 +34,9 @@ function getFactura($ticket){
         </header>
         <main>
             <!--<p>Platos escogidos <strong>MESA ' . $ticket[0]['id_mesa'] . '</strong></p>-->
-            <p>RUC/DNI Cliente: aquí va el ruc o dni</p>
+            <p>RUC/DNI Cliente: ' . $rucDni. '</p>
             <p>Razón Social/Nombres Cliente: <br>
-            aqui va el rs o nombres
+            ' . $razonSocial. '
             </p>
             <table>
                 <thead>
