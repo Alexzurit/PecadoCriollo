@@ -74,6 +74,14 @@
                             <div class="col text-end" id="numBebidasVendidos">Valor</div>
                         </div>
                         <div class="row border-bottom py-2">
+                            <div class="col">N° LICORES vendidos</div>
+                            <div class="col text-end" id="numLicoresVendidos">Valor</div>
+                        </div>
+                        <div class="row border-bottom py-2">
+                            <div class="col">N° VINOS vendidos</div>
+                            <div class="col text-end" id="numVinosVendidos">Valor</div>
+                        </div>
+                        <div class="row border-bottom py-2">
                             <div class="col">Total APROBADAS</div>
                             <div class="col text-end" id="totalAprobadas">Valor</div>
                         </div>
@@ -147,6 +155,8 @@ $(document).ready(function () {
                 $('#numMenusVendidos').text(data.menu_vendidos);
                 $('#numCartasVendidos').text(data.cartas_vendidas);
                 $('#numBebidasVendidos').text(data.bebidas_vendidas);
+                $('#numLicoresVendidos').text(data.licores_vendidos);
+                $('#numVinosVendidos').text(data.vinos_vendidos);
                 $('#totalAprobadas').text(data.num_ventas_aprobadas);
                 $('#totalCanceladas').text(data.num_ventas_canceladas);
                 $('#montoAprobado').text(data.total_ventas_aprobadas);

@@ -128,6 +128,8 @@
                         <option value="1">MENU</option>
                         <option value="2">CARTAS</option>
                         <option value="3">BEBIDAS</option>
+                        <option value="4">LICORES</option>
+                        <option value="5">VINOS</option>
                     </select>
                 </div>
                 <div class="mb-3">

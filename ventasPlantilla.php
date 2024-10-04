@@ -71,6 +71,9 @@ function getPlantilla($ticket){
             <div id="company">
             <p>Gracias por elegir nuestro restaurante para tu comida ¡Esperamos verte pronto!</p>
             </div>
+            <div id="company">
+            <b>¡Este no es un comprobante de pago!</b>
+            </div>
         </main>
         <footer>
         </footer>

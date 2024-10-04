@@ -403,7 +403,9 @@ public function salesReport($fechaInicio,$fechaFin){
                 num_ventas_realizadas,
                 cartas_vendidas,
                 menu_vendidos,
-                bebidas_vendidas
+                bebidas_vendidas,
+                licores_vendidos,
+                vinos_vendidos
             FROM
                 (SELECT SUM(total_venta) AS total_ventas_aprobadas
                 FROM tb_ventas
@@ -438,7 +440,9 @@ public function salesReport($fechaInicio,$fechaFin){
                 (SELECT
                     SUM(CASE WHEN tpl.nombre_platos = 'CARTAS' THEN tdv.cantidad_vendida ELSE 0 END) AS cartas_vendidas,
                     SUM(CASE WHEN tpl.nombre_platos = 'MENU' THEN tdv.cantidad_vendida ELSE 0 END) AS menu_vendidos,
-                    SUM(CASE WHEN tpl.nombre_platos = 'BEBIDAS' THEN tdv.cantidad_vendida ELSE 0 END) AS bebidas_vendidas
+                    SUM(CASE WHEN tpl.nombre_platos = 'BEBIDAS' THEN tdv.cantidad_vendida ELSE 0 END) AS bebidas_vendidas,
+                    SUM(CASE WHEN tpl.nombre_platos = 'LICORES' THEN tdv.cantidad_vendida ELSE 0 END) AS licores_vendidos,
+                    SUM(CASE WHEN tpl.nombre_platos = 'VINOS' THEN tdv.cantidad_vendida ELSE 0 END) AS vinos_vendidos
                 FROM
                     tb_ventas AS tv
                     INNER JOIN tb_detalle_venta AS tdv ON tv.id_venta = tdv.id_venta
