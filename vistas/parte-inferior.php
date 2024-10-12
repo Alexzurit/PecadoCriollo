@@ -82,7 +82,7 @@
 //    }
 //});
 </script>
-//Scrip reload page for security ctmre gaa
+<!--Scrip reload page for security ctmre gaa-->
 <script>
   // Recargar la página si el usuario navega hacia atrás
   window.onpageshow = function(event) {

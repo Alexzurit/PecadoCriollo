@@ -134,7 +134,7 @@
                                 <a href="changepass.php" class="sidebar-link">Cambiar contraseña</a>
                             </li>
                             <li class="sidebar-item">
-<!--                                <a href="#" class="sidebar-link">Forgot Password</a>-->
+                                <a href="cancelsale.php" class="sidebar-link">Cancelar Venta</a>
                             </li>
                         </ul>
                     </li>

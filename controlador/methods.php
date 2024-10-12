@@ -114,6 +114,61 @@ class methods extends Conexion{
         $conexion->close();
     }
     
+    //Actualizar Estado de VENTA
+    public function modificarEstado($id_venta){
+        $conexion = parent::conectar();
+        //Verificamos el estado actual de venta
+        $sqlVerified = "SELECT estado_venta FROM tb_ventas WHERE id_venta = ?;";
+        $sqlVerified = $conexion->prepare($sqlVerified);
+        $sqlVerified->bind_param("i", $id_venta);
+        $sqlVerified->execute();
+        $sqlVerified->bind_result($estadoActual);
+        $sqlVerified->fetch();
+        $sqlVerified->close();
+
+        if ($estadoActual === "CANCELADO") {
+            $response = array("status" => "CANCELADO", "message" => "Esta Venta ya está anulada.");
+        } else {
+            $estado = "CANCELADO";
+            $sql = "UPDATE tb_ventas SET estado_venta = ? WHERE id_venta=?;";
+            // Preparar la consulta
+            $stmt = $conexion->prepare($sql);
+            $stmt->bind_param("si", $estado,$id_venta);
+            // // Ejecutar la consulta
+            if ($stmt->execute()){
+                $response = array("status"=>"success","message"=>"Anulado Correctamente.");
+            } else {
+                $response = array("status"=>"error","message"=>"No se pudo Anular.");
+            }
+            $stmt->close(); //Cerramos la declaración
+        }
+        $conexion->close(); //Cerramos la conexion
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        
+        // $conexion = parent::conectar();
+        // $estado = "CANCELADO";
+        // $sql = "UPDATE tb_ventas SET estado_venta = ? WHERE id_venta=?;";
+        // // Preparar la consulta
+        // $stmt = $conexion->prepare($sql);
+
+        // // Bind de parámetros
+        // $stmt->bind_param("si", $estado,$id_venta);
+
+        // // Ejecutar la consulta
+        // if($stmt->execute()){
+        //     $response = array("status"=>"success","message"=>"Anulado Correctamente.");
+        // }else{
+        //     $response = array("status"=>"error","message"=>"No se pudo Anular.");
+        // }
+
+        // $stmt->close(); //Cerramos la declaración
+        // $conexion->close(); //Cerramos la conexion
+        // header('Content-Type: application/json');
+        // echo json_encode($response);
+    }
+    //FIN 
+
     public function eliminarConCodigo($id) {
         $conexion = parent::conectar();
         $sql = "DELETE FROM tb_producto WHERE id_producto =?";
@@ -355,7 +410,7 @@ public function obtenerDetallesVenta($id_venta) {
     }
 
     // Consulta SQL para obtener los detalles de la venta
-    $sql = "SELECT v.id_venta, v.id_usuario, v.id_mesa, v.fecha_venta,
+    $sql = "SELECT v.id_venta, v.id_usuario, v.id_mesa, v.fecha_venta, v.estado_venta, -- Agregar estado_venta
                    dv.id_detalle, dv.id_producto, dv.cantidad_vendida, dv.precio_venta, dv.subtotal,
                    p.nombre_prod
             FROM tb_ventas v
