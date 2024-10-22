@@ -144,7 +144,7 @@
     <input type="text" id="buscador" class="form-control" placeholder="Ingrese el nombre del producto...">
 </div>
 
-                <div id="productos-container" class="d-grid gap-2"></div>
+                <div id="productos-container" class="d-grid gap-2 overflow-auto" style="max-height: 600px;"></div>
             </div>
         </div>
     </div>
