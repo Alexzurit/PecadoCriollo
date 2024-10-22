@@ -27,7 +27,7 @@
         </div>
         <!-- Modal producto seleccionado -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Producto Seleccionado</h1>
@@ -62,14 +62,21 @@
                                     <option value="">nro de mesa</option>
                                 </select>
                             </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-cerrar">Cerrar</button>
-                                <button type="button" class="btn btn-warning btn-agregar" id="id-agregar">Agregar al Carro</button>
+                            <button type="button" class="btn btn-primary mt-3" id="masdetallesBoton">+ Detalles</button>
+                            <div class="container p-2 rounded-2 bg-info mt-5" id="detallesView" style="display: none;">
+                                <h5 class="text-center">Agregar detalles</h5>
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" id="id-description" rows="3" style="height: 100px;" placeholder="username"></textarea>
+                                    <label>Descripción</label>
+                                </div>
                             </div>
+
                         </form>
                     </div>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btn-cerrar">Cerrar</button>
+                        <button type="button" class="btn btn-warning btn-agregar" id="id-agregar">Agregar al Carro</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -250,6 +257,14 @@ $(document).ready(function () {
         $('#frmticket').get(0).contentWindow.print();
         //console.log(response);
     }
+</script>
+-->
+<script>
+    //Funcion para ocultar o mostral detalles en el modal
+    document.getElementById('masdetallesBoton').addEventListener('click', function() {
+        const detallesContainer = document.getElementById('detallesView');
+        detallesContainer.style.display = detallesContainer.style.display === 'none' ? 'block' : 'none';
+    })
 </script>
 <!-- script para el carrito -->
 <script>
