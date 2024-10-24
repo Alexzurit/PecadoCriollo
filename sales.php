@@ -293,6 +293,11 @@ $(document).ready(function () {
                 '</tr>';
 
             tabla.append(fila);
+            //Agregar una fila para la descripcion
+            // var filaDescripcion = '<tr>'+
+            // '<td colspan="5" class="text-muted">' + item.descripcion + '</td>'+
+            // '</tr>';
+            // tabla.append(filaDescripcion);
         });
 
         // Mostrar el total al final de la tabla
@@ -301,6 +306,14 @@ $(document).ready(function () {
             '<td colspan="3"><strong>' + total.toFixed(2) + '</strong></td>' +
             '</tr>';
         tabla.append(filaTotal);
+        //Agregar fila debajo de todo donde va descripcion
+        carrito.forEach(function (desc, index){
+            //Agregar una fila para la descripcion
+            var filaDescripcion = '<tr>'+
+            '<td colspan="5" class="text-dark">Descripcion: ' + desc.descripcion + '</td>'+
+            '</tr>';
+            tabla.append(filaDescripcion);
+        });
     }
 
     $(document).ready(function () {
@@ -314,6 +327,7 @@ $(document).ready(function () {
             var precio = parseFloat($('#id-precio').val());
             var cantidad = parseInt($('#id-cantidad').val());
             var mesa = $('#id-mesa').val();
+            var descripcion = $('#id-description').val();
 
             // Validar datos (puedes agregar más validaciones aquí si es necesario)
             //if (!codigo || !nombre || isNaN(precio) || isNaN(cantidad) || !mesa) {
@@ -331,7 +345,8 @@ $(document).ready(function () {
                 nombre: nombre,
                 precio: precio,
                 cantidad: cantidad,
-                mesa: mesa
+                mesa: mesa,
+                descripcion: descripcion
             };
 
             // Agregar producto al carrito
@@ -365,6 +380,7 @@ $(document).ready(function () {
         // Resetear Validación
         //$("#formProducto").data("bootstrapValidator").resetForm(true);
         $("#id-cantidad").val("");
+        $("#id-description").val("");
     }
 
 </script>
