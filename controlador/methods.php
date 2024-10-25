@@ -291,11 +291,11 @@ public function transaction($carrito, $id_usuario) {
             $total_venta = 0;
 
             // Preparar la consulta para insertar detalles de la venta
-            $sql_detalle = "INSERT INTO tb_detalle_venta (id_venta, id_producto, cantidad_vendida, precio_venta, subtotal)
-                            VALUES (?, ?, ?, ?, ?)";
+            $sql_detalle = "INSERT INTO tb_detalle_venta (id_venta, id_producto, cantidad_vendida, precio_venta, subtotal, descripcion)
+                            VALUES (?, ?, ?, ?, ?, ?)";
             
             $stmt_detalle = $conexion->prepare($sql_detalle);
-            $stmt_detalle->bind_param("iiidd", $id_venta, $id_producto, $cantidad_vendida, $precio_venta, $subtotal);
+            $stmt_detalle->bind_param("iiidds", $id_venta, $id_producto, $cantidad_vendida, $precio_venta, $subtotal, $descripcion);
 
             // Recorrer el carrito y agregar los detalles de la venta a la tabla tb_detalle_venta
             foreach ($carrito as $producto) {
@@ -309,6 +309,10 @@ public function transaction($carrito, $id_usuario) {
                 $precio_venta = $producto['precio'];
                 $subtotal = $cantidad_vendida * $precio_venta;
 
+                //Estableceer descripcion
+                //Si descripcion existe y es diferente de null entonces agregar el valor que hay en descripcion sino agrega sin detalles
+                //isset para verificar la existencia en este caso sí existe cuando no hay nada y es una cadena vacia(''), por ello usaremos empty
+                $descripcion = !empty($producto['descripcion']) && $producto['descripcion'] !== null ? $producto['descripcion'] : "sin detalles";
                 // Ejecutar la consulta preparada para insertar detalles de la venta
                 $stmt_detalle->execute();
 
