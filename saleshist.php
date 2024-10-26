@@ -61,6 +61,31 @@
               <div id="detalle-venta">
                 
               </div>
+            <!--TABLA-->
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Mesa Escogida: <b id="msa">Mesa 4</b></label>
+                </div>
+                <div class="col">
+                    <label class="form-label">Cod: <b>#</b><b id="id-sale">1234</b></label>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table id="tablaventa" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nro</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Aquí es donde se agregarán las filas dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            <!--TABLA-->
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-fact btn-xs" id="btn-fact">
@@ -220,21 +245,44 @@ $(document).ready(function () {
                 type: 'GET',
                 dataType: 'json',
                 success: function (detalleData) {
-                    var detalleVenta = $('#detalle-venta');
+                    var tbody = $('#tablaventa tbody'); // Referencia al cuerpo de la tabla
                     // Limpiar el contenido anterior
-                    detalleVenta.empty();
+                    tbody.empty();
+                    var totalVenta = 0; // Inicializar el total de la venta
                     
-                    // Construir el contenido del detalle de la venta en el modal
-                    detalleData.forEach(function (detalle) {
-                        var detalleHTML = 
-                                          '<p>Nombre Producto: ' + detalle.nombre_prod + '</p>' +
-                                          '<p>ID Producto: ' + detalle.id_producto + '</p>' +
-                                          '<p>Cantidad: ' + detalle.cantidad_vendida + '</p>' +
-                                          '<p>Precio Venta: ' + detalle.precio_venta + '</p>' +
-                                          '<p>Subtotal: ' + detalle.subtotal + '</p>' +
-                                          '<hr>';
+                    // Recorrer los detalles de la venta y agregarlos a la tabla
+                    detalleData.forEach(function (detalle, index) {
+                        var subtotal = detalle.cantidad_vendida * detalle.precio_venta;
+                        totalVenta += subtotal; // Sumar el subtotal al total
+                        document.getElementById('msa').innerText = detalle.id_mesa;
+                        document.getElementById('id-sale').innerText = detalle.id_venta;
 
-                        detalleVenta.append(detalleHTML);//Agregar detalles al modal
+                        var filaHTML = 
+                            '<tr>' +
+                                '<th scope="row">' + (index + 1) + '</th>' +
+                                '<td>' + detalle.nombre_prod + '</td>' +
+                                '<td>' + detalle.cantidad_vendida + '</td>' +
+                                '<td>S/ ' + subtotal.toFixed(2) + '</td>' +
+                            '</tr>';
+                        
+                        tbody.append(filaHTML); // Agregar la fila a la tabla
+                    });
+                    // Agregar la fila del total al final de la tabla
+                    var totalHTML = 
+                        '<tr>' +
+                            '<td colspan="3" class="text-end"><b>Total</b></td>' +
+                            '<td><b>S/ ' + totalVenta.toFixed(2) + '</b></td>' +
+                        '</tr>';
+                    
+                    tbody.append(totalHTML); // Agregar el total a la tabla
+
+                    detalleData.forEach(function (detalle) {
+                        var descripcionHTML = 
+                            '<tr>' +
+                                '<td colspan="4" class="text-center"><b>Descripción: </b>' + detalle.descripcion + '</td>' +
+                            '</tr>';
+                        
+                        tbody.append(descripcionHTML); // Agregar la descripción a la tabla
                     });
                 },
                 error: function (xhr, status, error) {

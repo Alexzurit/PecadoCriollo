@@ -415,7 +415,7 @@ public function obtenerDetallesVenta($id_venta) {
 
     // Consulta SQL para obtener los detalles de la venta
     $sql = "SELECT v.id_venta, v.id_usuario, v.id_mesa, v.fecha_venta, v.estado_venta, -- Agregar estado_venta
-                   dv.id_detalle, dv.id_producto, dv.cantidad_vendida, dv.precio_venta, dv.subtotal,
+                   dv.id_detalle, dv.id_producto, dv.cantidad_vendida, dv.precio_venta, dv.subtotal, dv.descripcion,
                    p.nombre_prod
             FROM tb_ventas v
             INNER JOIN tb_detalle_venta dv ON v.id_venta = dv.id_venta
