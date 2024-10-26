@@ -108,11 +108,36 @@
 
                         var totalVenta = 0; // Inicializar el total de la venta
                         var estadoVenta = detalleData[0].estado_venta;
+                        var fechaCalculo = detalleData[0].fecha_venta;
+                        // Convertir la cadena de fecha a un objeto Date
+                        var partesFecha = fechaCalculo.split(' ');
+                        var fechaYHora = partesFecha[0].split('-');
+                        var horaYMinuto = partesFecha[1].split(':');
+
+                        var fecha = new Date(
+                            fechaYHora[0], // Año
+                            fechaYHora[1] - 1, // Mes (0-11)
+                            fechaYHora[2], // Día
+                            horaYMinuto[0], // Hora
+                            horaYMinuto[1], // Minutos
+                            0 // Segundos
+                        );
+                        
+                        var fechaActual = new Date();
+                        
+                        var diferencia = fechaActual - fecha;
+                        
+                        var horasPasadas = diferencia / (1000 * 60 * 60);
+                        
 
                         // Verificar el estado de la venta (fuera del foreach)
                         if (estadoVenta === 'CANCELADO') {
                             $('#anularBtn').prop('disabled', true);
-                            $('#tablaventa').before('<div class="alert alert-warning">Esta venta ya está anulada.</div>');
+                            $('#tablaventa').before('<div class="alert alert-danger">Esta venta ya está anulada.</div>');
+                        } else if (horasPasadas > 5){
+                            // $('#anularBtn').prop('disabled', false);
+                            $('#anularBtn').prop('disabled', true);
+                            $('#tablaventa').before('<div class="alert alert-primary">No se puede anular, Límite tiempo excedido</div>');
                         } else {
                             $('#anularBtn').prop('disabled', false);
                         }
@@ -158,27 +183,24 @@
             alert('Por favor ingresa un ID de venta válido.');
         }
     });
-    // // Limpiar el contenido del modal
-    // function limpiarModal() {
-    //     $('#tablaventa tbody').empty(); // Limpiar la tabla
-    //     $('#anularBtn').prop('disabled', false); // Habilitar el botón por defecto
-    //     $('#tablaventa').prev('.alert').remove(); // Eliminar cualquier alerta previa
-    //     document.getElementById('msa').innerText = ''; // Limpiar el campo Mesa
-    //     document.getElementById('id-sale').innerText = ''; // Limpiar el campo ID de venta
-    // }
-
+    // Limpiar el contenido del modal
+    function limpiarModal() {
+        $('#tablaventa tbody').empty(); // Limpiar la tabla
+        $('#id-sale').text(''); // Limpiar el ID de la venta
+        $('#msa').text(''); // Limpiar la mesa
+        $('#anularBtn').prop('disabled', false); // Habilitar el botón por defecto
+        $('#tablaventa').prev('.alert').remove(); // Eliminar cualquier alerta previa
+        $('.alert-danger').remove(); // Eliminar el mensaje de "venta anulada"
+        $('.alert-success').remove(); // Eliminar el mensaje de "venta anulada"
+        $('.alert-primary').remove(); // Eliminar el mensaje
+    }
+    $('#cerrarBtn').on('click', function(){
+        limpiarModal();
+    });
     // // Limpiar contenido al cerrar el modal
     // $('#ModalBuscaVenta').on('hidden.bs.modal', function () {
     //     limpiarModal();
     // });
-    // Limpiar el modal cuando se haga clic en el botón de cerrar
-    $('#cerrarBtn').on('click', function () {
-        $('#tablaventa tbody').empty(); // Limpiar la tabla
-        $('#id-sale').text(''); // Limpiar el ID de la venta
-        $('#msa').text(''); // Limpiar la mesa
-        $('.alert-warning').remove(); // Eliminar el mensaje de "venta anulada"
-        $('#anularBtn').prop('disabled', false); // Habilitar el botón de "Anular" nuevamente
-    });
 </script>
 
 <script>
@@ -226,13 +248,5 @@
                 Swal.fire("La venta no ha sido anulada", "", "info");
             }
         });
-    });
-    $('#cerrarBtn').on('click', function () {
-        $('#tablaventa tbody').empty(); // Limpiar la tabla
-        $('#id-sale').text(''); // Limpiar el ID de la venta
-        $('#msa').text(''); // Limpiar la mesa
-        $('.alert-warning').remove(); // Eliminar el mensaje de "venta anulada"
-        $('.alert-success').remove(); // Eliminar el mensaje de "venta anulada"
-        $('#anularBtn').prop('disabled', false); // Habilitar el botón de "Anular" nuevamente
     });
 </script>
