@@ -183,33 +183,48 @@
 
 <script>
     document.getElementById('anularBtn').addEventListener('click', function() {
-        let idVenta = document.getElementById('id-venta').value; // Obtener el ID de venta desde el formulario
+        Swal.fire({
+            title: "¿Seguro de ANULAR la venta?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Sí",
+            denyButtonText: `NO`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                //Swal.fire("Saved!", "", "success");
+                let idVenta = document.getElementById('id-venta').value;
+                if (!idVenta) {
+                    alert("Por favor ingresa un ID de venta válido");
+                    return;
+                }
 
-        if (!idVenta) {
-            alert("Por favor ingresa un ID de venta válido");
-            return;
-        }
+                fetch('controlador/class/changeSL.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `id_venta=${idVenta}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById('id-sale').innerText = `${idVenta}`;
+                        //document.getElementById('tablaventa').insertAdjacentHTML('beforebegin', '<div class="alert alert-success">VENTA ANULADA</div>');
+                        document.getElementById('tablaventa').insertAdjacentHTML('beforebegin', `<div class="alert alert-success">${data.message}</div>`);
+                        document.getElementById('anularBtn').disabled = true;
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                //Podemos agregar mensaje opcional
 
-        fetch('controlador/class/changeSL.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `id_venta=${idVenta}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                document.getElementById('id-sale').innerText = `${idVenta}`;
-                //document.getElementById('tablaventa').insertAdjacentHTML('beforebegin', '<div class="alert alert-success">VENTA ANULADA</div>');
-                document.getElementById('tablaventa').insertAdjacentHTML('beforebegin', `<div class="alert alert-success">${data.message}</div>`);
-                document.getElementById('anularBtn').disabled = true;
-            } else {
-                alert(data.message);
+            } else if (result.isDenied) {
+                Swal.fire("La venta no ha sido anulada", "", "info");
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
         });
     });
     $('#cerrarBtn').on('click', function () {
