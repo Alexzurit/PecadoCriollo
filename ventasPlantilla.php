@@ -78,6 +78,10 @@ function getPlantilla($ticket){
         <footer>
         </footer>
     </body>';
+    foreach ($detalles_venta as $producto){
+        $contenido .= '
+                    <p>DETALLE: '. $producto['descripcion'] .'</p>';
+    }
 
     return $contenido;
 }
